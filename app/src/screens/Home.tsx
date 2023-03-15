@@ -23,7 +23,7 @@ const Home = () => {
             }
         }
         getTrendingMovies()
-    }, [])
+    }, [movies])
 
     return (
         <View style={styles.container}>
