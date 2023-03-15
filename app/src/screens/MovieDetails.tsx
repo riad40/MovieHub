@@ -10,23 +10,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { styles } from '../assets/styles/appContainer'
 import { Heading } from '../components'
 
-interface Movie {
-    adult: boolean
-    backdrop_path: string
-    genre_ids: number[]
-    id: number | string
-    original_language: string
-    original_title: string
-    overview: string
-    popularity: number
-    poster_path: string
-    release_date: string
-    title: string
-    video: boolean
-    vote_average: number
-    vote_count: number
-}
-
 const MovieDetails = () => {
     return (
         <ScrollView style={styles.container}>

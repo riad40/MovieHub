@@ -1,3 +1,5 @@
+import rootReducer from '../state/reducers'
+
 export type Movie = {
     id: number | string
     title: string
@@ -18,3 +20,5 @@ export type Movie = {
     status: string
     tagline: string
 }
+
+export type RootState = ReturnType<typeof rootReducer>
