@@ -20,8 +20,6 @@ const AppNavigator = () => {
                             iconName = focused ? 'home' : 'home-outline'
                         } else if (route.name === 'Favorites') {
                             iconName = focused ? 'heart' : 'heart-outline'
-                        } else if (route.name === 'MovieDetails') {
-                            iconName = focused ? 'film' : 'film-outline'
                         }
 
                         return (
@@ -39,6 +37,8 @@ const AppNavigator = () => {
                         backgroundColor: '#000',
                         borderTopWidth: 0,
                         height: 60,
+                        borderTopLeftRadius: 20,
+                        borderTopRightRadius: 20,
                     },
                     tabBarLabelStyle: {
                         fontSize: 12,
@@ -49,7 +49,13 @@ const AppNavigator = () => {
             >
                 <Tab.Screen name="Home" component={Home} />
                 <Tab.Screen name="Favorites" component={Favorites} />
-                <Tab.Screen name="MovieDetails" component={MovieDetails} />
+                <Tab.Screen
+                    name="MovieDetails"
+                    component={MovieDetails}
+                    options={{
+                        tabBarButton: (props) => null,
+                    }}
+                />
             </Tab.Navigator>
         </NavigationContainer>
     )
