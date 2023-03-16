@@ -11,7 +11,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { styles } from '../assets/styles/appContainer'
 import { useEffect, useState } from 'react'
 import api from '../helpers/api'
-import { MovieDetailsType, MovieCastType } from '../@types/types'
+import {
+    MovieDetailsType,
+    MovieCastType,
+    MovieCommentsType,
+} from '../@types/types'
+import { CommentCard } from '../components'
 
 type Props = {
     route: any
@@ -45,9 +50,23 @@ const MovieDetails = ({ route }: Props) => {
         }
     }
 
+    // get movie comments from api
+    const [comments, setComments] = useState<MovieCommentsType>(
+        {} as MovieCommentsType
+    )
+    const getMovieComments = async () => {
+        try {
+            const response = await api.get(`/movie/${id}/reviews`)
+            setComments(response.data.results)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         getMovieActors()
         getMovieDetails()
+        getMovieComments()
     }, [id])
 
     return (
@@ -135,16 +154,24 @@ const MovieDetails = ({ route }: Props) => {
                         />
                     </View>
                     <Text style={styles1.movieDetailHeading}>Description</Text>
-                    <Text
-                        style={[
-                            styles1.movieDetailText,
-                            {
-                                marginBottom: 30,
-                            },
-                        ]}
-                    >
+                    <Text style={styles1.movieDetailText}>
                         {movieDetails.overview}
                     </Text>
+                    <Text style={styles1.movieDetailHeading}>Comments</Text>
+                    <View
+                        style={{
+                            marginBottom: 30,
+                        }}
+                    >
+                        <FlatList
+                            data={comments}
+                            horizontal
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => (
+                                <CommentCard comment={item} />
+                            )}
+                        />
+                    </View>
                 </View>
             </View>
         </ScrollView>
