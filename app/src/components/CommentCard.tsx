@@ -17,11 +17,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 10,
         marginHorizontal: 10,
-        backgroundColor: '#001d3d',
+        backgroundColor: '#495057',
     },
     commentText: {
         fontSize: 16,
-        color: 'white',
+        color: '#fff',
     },
     commentTextAuthor: {
         fontSize: 16,
