@@ -23,6 +23,8 @@ const Search = ({ navigation }: Props) => {
 
     const [movies, setMovies] = useState<any>([])
 
+    const [searchClicked, setSearchClicked] = useState(false)
+
     // handle search input
     const handleSearch = (text: string) => {
         setSearch(text)
@@ -37,6 +39,7 @@ const Search = ({ navigation }: Props) => {
             Alert.alert('Please enter a movie name')
             return
         }
+        setSearchClicked(true)
         try {
             const response = await api.get(`/search/movie?query=${search}`)
             setMovies(response.data.results)
@@ -80,6 +83,32 @@ const Search = ({ navigation }: Props) => {
                     keyExtractor={(item) => item.id.toString()}
                 />
             </View>
+            <View style={styles1.noMoviesContainer}>
+                {movies.length === 0 && search !== '' && searchClicked && (
+                    <>
+                        <Ionicons name="alert-circle" size={40} color="red" />
+                        <Text
+                            style={{
+                                color: 'red',
+                                fontSize: 20,
+                                textAlign: 'center',
+                            }}
+                        >
+                            No movies found. Enter a movie name to search
+                        </Text>
+                    </>
+                )}
+            </View>
+            <View style={styles1.noMoviesContainer}>
+                {movies.length === 0 && (
+                    <>
+                        <Ionicons name="rocket" size={50} color="#fff" />
+                        <Text style={{ color: '#fff' }}>
+                            Search for a movie....
+                        </Text>
+                    </>
+                )}
+            </View>
         </View>
     )
 }
@@ -115,6 +144,11 @@ const styles1 = StyleSheet.create({
         backgroundColor: '#495057',
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
+    },
+    noMoviesContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 50,
     },
 })
 
