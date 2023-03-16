@@ -17,14 +17,15 @@ import {
     MovieCommentsType,
 } from '../@types/types'
 import { CommentCard } from '../components'
+import { NavigationProp } from '@react-navigation/native'
 
 type Props = {
+    navigation: NavigationProp<any>
     route: any
 }
 
-const MovieDetails = ({ route }: Props) => {
+const MovieDetails = ({ navigation, route }: Props) => {
     const { id } = route.params
-
     const [actors, setActors] = useState<MovieCastType>({} as MovieCastType)
     // get movie actors from api
     const getMovieActors = async () => {
@@ -73,7 +74,7 @@ const MovieDetails = ({ route }: Props) => {
         <ScrollView style={styles.container}>
             <View>
                 <View style={styles1.header}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Ionicons name="arrow-back" size={30} color="red" />
                     </TouchableOpacity>
                     <Text style={styles1.title}>

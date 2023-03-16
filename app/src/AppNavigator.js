@@ -3,7 +3,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { NavigationContainer } from '@react-navigation/native'
 
 import Home from './screens/Home'
-import Favorites from './screens/Favorites'
+import Search from './screens/Search'
 import MovieDetails from './screens/MovieDetails'
 
 const Tab = createBottomTabNavigator()
@@ -18,8 +18,8 @@ const AppNavigator = () => {
 
                         if (route.name === 'Home') {
                             iconName = focused ? 'home' : 'home-outline'
-                        } else if (route.name === 'Favorites') {
-                            iconName = focused ? 'heart' : 'heart-outline'
+                        } else if (route.name === 'Search') {
+                            iconName = focused ? 'search' : 'search-outline'
                         }
 
                         return (
@@ -46,7 +46,7 @@ const AppNavigator = () => {
                 })}
             >
                 <Tab.Screen name="Home" component={Home} />
-                <Tab.Screen name="Favorites" component={Favorites} />
+                <Tab.Screen name="Search" component={Search} />
                 <Tab.Screen
                     name="MovieDetails"
                     component={MovieDetails}
