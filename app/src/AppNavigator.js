@@ -37,8 +37,6 @@ const AppNavigator = () => {
                         backgroundColor: '#000',
                         borderTopWidth: 0,
                         height: 60,
-                        borderTopLeftRadius: 20,
-                        borderTopRightRadius: 20,
                     },
                     tabBarLabelStyle: {
                         fontSize: 12,

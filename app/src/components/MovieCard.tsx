@@ -7,14 +7,25 @@ import {
     Dimensions,
 } from 'react-native'
 
+import { NavigationProp } from '@react-navigation/native'
+
 type Props = {
     movieName: string
     url: string
+    navigation: NavigationProp<any>
+    id: number | string
 }
 
-const MovieCard = ({ movieName, url }: Props) => {
+const MovieCard = ({ movieName, url, id, navigation }: Props) => {
+    const onPress = (id: number | string) => {
+        navigation.navigate('MovieDetails', { id })
+    }
+
     return (
-        <TouchableOpacity style={styles.cardContaier}>
+        <TouchableOpacity
+            style={styles.cardContaier}
+            onPress={() => onPress(id)}
+        >
             <View style={styles.content}>
                 <Image
                     source={

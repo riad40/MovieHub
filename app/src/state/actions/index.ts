@@ -5,9 +5,4 @@ const saveMovies = (movies: Movie[]) => ({
     payload: movies,
 })
 
-const getOneMovie = (id: number | string) => ({
-    type: 'GET_ONE_MOVIE',
-    payload: id,
-})
-
-export { saveMovies, getOneMovie }
+export { saveMovies }

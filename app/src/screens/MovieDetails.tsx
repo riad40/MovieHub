@@ -5,12 +5,51 @@ import {
     TouchableOpacity,
     StyleSheet,
     ScrollView,
+    FlatList,
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { styles } from '../assets/styles/appContainer'
-import { Heading } from '../components'
+import { useEffect, useState } from 'react'
+import api from '../helpers/api'
+import { MovieDetailsType, MovieCastType } from '../@types/types'
 
-const MovieDetails = () => {
+type Props = {
+    route: any
+}
+
+const MovieDetails = ({ route }: Props) => {
+    const { id } = route.params
+
+    const [actors, setActors] = useState<MovieCastType>({} as MovieCastType)
+    // get movie actors from api
+    const getMovieActors = async () => {
+        try {
+            const response = await api.get(`/movie/${id}/credits`)
+            setActors(response.data.cast)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const [movieDetails, setMovieDetails] = useState<MovieDetailsType>(
+        {} as MovieDetailsType
+    )
+
+    // get movie details from api
+    const getMovieDetails = async () => {
+        try {
+            const response = await api.get(`/movie/${id}`)
+            setMovieDetails(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getMovieActors()
+        getMovieDetails()
+    }, [id])
+
     return (
         <ScrollView style={styles.container}>
             <View>
@@ -18,7 +57,9 @@ const MovieDetails = () => {
                     <TouchableOpacity>
                         <Ionicons name="arrow-back" size={30} color="red" />
                     </TouchableOpacity>
-                    <Heading content="Inception" />
+                    <Text style={styles1.title}>
+                        {movieDetails.original_title}
+                    </Text>
                     <TouchableOpacity>
                         <Ionicons name="heart-outline" size={30} color="red" />
                     </TouchableOpacity>
@@ -27,48 +68,83 @@ const MovieDetails = () => {
                     <Image
                         style={styles1.img}
                         source={{
-                            uri: 'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',
+                            uri: `https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`,
                         }}
                     />
                 </View>
                 <View style={styles1.movieContainer}>
-                    <View style={styles1.movie}>
-                        <Text style={styles1.movieDetailHeading}>Heros</Text>
-                        <Text style={styles1.movieDetailText}>
-                            Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page
-                        </Text>
-                        <Text style={styles1.movieDetailHeading}>Genre</Text>
-                        <Text style={styles1.movieDetailText}>
-                            Action, Adventure, Sci-Fi
-                        </Text>
-                        <Text style={styles1.movieDetailHeading}>
-                            Release Date
-                        </Text>
-                        <Text style={styles1.movieDetailText}>2010-07-14</Text>
-                        <Text style={styles1.movieDetailHeading}>
-                            Running Time
-                        </Text>
-                        <Text style={styles1.movieDetailText}>148 min</Text>
-
-                        <Text style={styles1.movieDetailHeading}>
-                            Description
-                        </Text>
-                        <Text
-                            style={[
-                                styles1.movieDetailText,
-                                {
-                                    marginBottom: 30,
-                                },
-                            ]}
-                        >
-                            A thief who steals corporate secrets through use of
-                            dream-sharing technology is given the inverse task
-                            of planting an idea into the mind of a CEO. A thief
-                            who steals corporate secrets through use of
-                            dream-sharing technology is given the inverse task
-                            of planting an idea into the mind of a CEO.
-                        </Text>
+                    <View style={styles1.generalInfos}>
+                        <View style={styles1.infos}>
+                            <Ionicons name="star" size={20} color="red" />
+                            <Text style={styles1.movieDetailText}>
+                                {movieDetails.vote_average}
+                            </Text>
+                        </View>
+                        <View style={styles1.infos}>
+                            <Ionicons name="time" size={20} color="red" />
+                            <Text style={styles1.movieDetailText}>
+                                {movieDetails.runtime} min
+                            </Text>
+                        </View>
+                        <View style={styles1.infos}>
+                            <Ionicons name="calendar" size={20} color="red" />
+                            <Text style={styles1.movieDetailText}>
+                                {movieDetails.release_date}
+                            </Text>
+                        </View>
                     </View>
+                    <Text
+                        style={[
+                            styles1.movieDetailHeading,
+                            {
+                                marginVertical: 10,
+                            },
+                        ]}
+                    >
+                        Cast
+                    </Text>
+                    <View>
+                        <FlatList
+                            data={actors}
+                            keyExtractor={(item) => item.id.toString()}
+                            horizontal
+                            renderItem={({ item }) => (
+                                <View
+                                    style={{
+                                        alignItems: 'center',
+                                        marginBottom: 10,
+                                        marginHorizontal: 5,
+                                    }}
+                                >
+                                    <Image
+                                        style={{
+                                            width: 50,
+                                            height: 50,
+                                            borderRadius: 25,
+                                            marginRight: 10,
+                                        }}
+                                        source={{
+                                            uri: `https://image.tmdb.org/t/p/w500/${item.profile_path}`,
+                                        }}
+                                    />
+                                    <Text style={styles1.movieDetailText}>
+                                        {item.name}
+                                    </Text>
+                                </View>
+                            )}
+                        />
+                    </View>
+                    <Text style={styles1.movieDetailHeading}>Description</Text>
+                    <Text
+                        style={[
+                            styles1.movieDetailText,
+                            {
+                                marginBottom: 30,
+                            },
+                        ]}
+                    >
+                        {movieDetails.overview}
+                    </Text>
                 </View>
             </View>
         </ScrollView>
@@ -79,12 +155,19 @@ const styles1 = StyleSheet.create({
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-start',
+    },
+    title: {
+        fontWeight: 'bold',
+        color: 'white',
+        width: '70%',
+        fontSize: 20,
+        textAlign: 'center',
     },
     imgContainer: {
         marginTop: 20,
         width: '100%',
-        height: 300,
+        height: 200,
         borderWidth: 1,
         borderColor: 'red',
         borderRadius: 10,
@@ -99,11 +182,6 @@ const styles1 = StyleSheet.create({
         height: '100%',
         padding: 10,
     },
-    movie: {
-        width: '100%',
-        height: '100%',
-        marginTop: 10,
-    },
     movieDetailHeading: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -113,6 +191,15 @@ const styles1 = StyleSheet.create({
     movieDetailText: {
         fontSize: 16,
         color: 'white',
+    },
+    generalInfos: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    infos: {
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 })
 

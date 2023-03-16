@@ -7,19 +7,12 @@ interface SaveMoviesAction {
     payload: Movie[]
 }
 
-interface GetOneMovieAction {
-    type: 'GET_ONE_MOVIE'
-    payload: number | string
-}
-
-type Action = SaveMoviesAction | GetOneMovieAction
+type Action = SaveMoviesAction
 
 const movieReducer = (state: Movie[] = initialState, action: Action) => {
     switch (action.type) {
         case 'SAVE_MOVIES':
             return action.payload
-        case 'GET_ONE_MOVIE':
-            return state.filter((movie) => movie.id === action.payload)
         default:
             return state
     }

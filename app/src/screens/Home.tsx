@@ -5,8 +5,13 @@ import { Header, Heading, MovieCard } from '../components'
 import api from '../helpers/api'
 import { RootState } from '../@types/types'
 import { useDispatch, useSelector } from 'react-redux'
+import { NavigationProp } from '@react-navigation/native'
 
-const Home = () => {
+type HomeProps = {
+    navigation: NavigationProp<any>
+}
+
+const Home = ({ navigation }: HomeProps) => {
     const dispatch = useDispatch()
     const movies = useSelector((state: RootState) => state.movies)
 
@@ -33,7 +38,12 @@ const Home = () => {
                 data={movies}
                 numColumns={2}
                 renderItem={({ item }) => (
-                    <MovieCard movieName={item.title} url={item.poster_path} />
+                    <MovieCard
+                        movieName={item.title}
+                        url={item.poster_path}
+                        id={item.id}
+                        navigation={navigation}
+                    />
                 )}
                 keyExtractor={(item) => item.id.toString()}
             />
