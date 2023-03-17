@@ -16,7 +16,7 @@ import {
     MovieCastType,
     MovieCommentsType,
 } from '../@types/types'
-import { CommentCard } from '../components'
+import { CommentCard, Loading } from '../components'
 import { NavigationProp } from '@react-navigation/native'
 
 type Props = {
@@ -68,7 +68,16 @@ const MovieDetails = ({ navigation, route }: Props) => {
         getMovieActors()
         getMovieDetails()
         getMovieComments()
+        return () => {
+            setActors({} as MovieCastType)
+            setMovieDetails({} as MovieDetailsType)
+            setComments({} as MovieCommentsType)
+        }
     }, [id])
+
+    if (!movieDetails || !actors || !comments) {
+        return <Loading />
+    }
 
     return (
         <ScrollView style={styles.container}>

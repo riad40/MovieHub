@@ -11,7 +11,7 @@ import { styles } from '../assets/styles/appContainer'
 import { useState } from 'react'
 import api from '../helpers/api'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { MovieCard } from '../components'
+import { MovieCard, Loading } from '../components'
 import { NavigationProp } from '@react-navigation/native'
 
 type Props = {
@@ -22,8 +22,6 @@ const Search = ({ navigation }: Props) => {
     const [search, setSearch] = useState('')
 
     const [movies, setMovies] = useState<any>([])
-
-    const [searchClicked, setSearchClicked] = useState(false)
 
     // handle search input
     const handleSearch = (text: string) => {
@@ -39,13 +37,16 @@ const Search = ({ navigation }: Props) => {
             Alert.alert('Please enter a movie name')
             return
         }
-        setSearchClicked(true)
         try {
             const response = await api.get(`/search/movie?query=${search}`)
             setMovies(response.data.results)
         } catch (error) {
             console.log(error)
         }
+    }
+
+    if (!movies) {
+        return <Loading />
     }
 
     return (
@@ -82,22 +83,6 @@ const Search = ({ navigation }: Props) => {
                     )}
                     keyExtractor={(item) => item.id.toString()}
                 />
-            </View>
-            <View style={styles1.noMoviesContainer}>
-                {movies.length === 0 && search !== '' && searchClicked && (
-                    <>
-                        <Ionicons name="alert-circle" size={40} color="red" />
-                        <Text
-                            style={{
-                                color: 'red',
-                                fontSize: 20,
-                                textAlign: 'center',
-                            }}
-                        >
-                            No movies found. Enter a movie name to search
-                        </Text>
-                    </>
-                )}
             </View>
             <View style={styles1.noMoviesContainer}>
                 {movies.length === 0 && (
