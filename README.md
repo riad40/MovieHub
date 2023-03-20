@@ -9,13 +9,19 @@ mobile app based on IMDb api database
 git clone https://github.com/riad40/MovieHub
 ```
 
-2. Install NPM packages
+2. Navigate to the app directory
+
+```bash
+cd app
+```
+
+3. Install NPM packages
 
 ```bash
 npm install
 ```
 
-3. Run the app
+4. Run the app
 
 ```bash
 npm run android
