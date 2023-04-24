@@ -30,7 +30,7 @@ const MovieCard = ({ movieName, url, id, navigation }: Props) => {
                 <Image
                     source={
                         !url
-                            ? require('../assets/imgs/inception-cover.jpg')
+                            ? require('../assets/imgs/No-Photo-Available.jpg')
                             : { uri: `https://image.tmdb.org/t/p/w500/${url}` }
                     }
                     style={styles.contentImage}
